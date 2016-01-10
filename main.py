@@ -17,7 +17,7 @@ client = discord.Client()
 #   'visible': Bool,
 #   'description': String,
 #   'example': String,
-#   'class': Class (with init(client) and run(params, message) function)
+#   'class': Class (run(params, message))
 # }
 
 commands = {}
@@ -35,7 +35,31 @@ for f in glob('com/*.py'):
             'class': class_
         }
 
+class Help:
+    def __init__(self, client):
+        return
 
+    async def run(self, params, message):
+        response = [
+            "Hi! I'm baskerbot. My commands are:",
+            '```'
+        ]
+        for command in commands:
+            com = commands[command]
+            if com['visible']:
+                response.append(".{0} (!{0})".format(command))
+                response.append("  {0}".format(com['description']))
+                response.append("  Example: `{0}`".format(com['example']))
+        response.append('```')
+
+        return '\n'.join(response)
+
+commands['help'] = {
+    'visible': True,
+    'description': "Displays this help dialogue",
+    'example': ".help",
+    'class': Help(client)
+}
 
 # On join
 
@@ -59,6 +83,11 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+
+    # Image and file catch
+    if len(message.content) == 0:
+        return
+
     starter = message.content[0]
     splitMessage = str.split(message.content)
     command = splitMessage[0][1:]
