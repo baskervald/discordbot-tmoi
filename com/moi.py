@@ -1,15 +1,7 @@
 from bs4 import BeautifulSoup
 from requests import get
 
-class Plugin:
-
-    data = {
-        'name': 'moi',
-        'visible': True,
-        'description': "Search moddingofisaac.com",
-        'example': ".moi <query>"
-    }
-
+class MoI:
     def __init__(self, client):
         self.client = client
         self.baseurl = 'http://moddingofisaac.com/mod_search.php?search={0}'
@@ -44,3 +36,13 @@ class Plugin:
 
         # And put it all back together into the final message
         return '\n'.join(results)
+
+
+commands = {
+    'moi': {
+        'visible': True,
+        'description': "Search moddingofisaac.com",
+        'example': ".moi <query>",
+        'class': MoI
+    }
+}

@@ -24,15 +24,11 @@ commands = {}
 for f in glob('com/*.py'):
     if isfile(f) and basename(f) != '__init__.py':
         mod = import_module('com.{0}'.format(basename(f)[:-3]))
-        class_ = mod.Plugin(client)
-        dat = class_.data
+        modcoms = mod.commands
 
-        commands[dat['name']] = {
-            'visible': dat['visible'],
-            'description': dat['description'],
-            'example': dat['example'],
-            'class': class_
-        }
+        for key, value in modcoms.items():
+            commands[key] = value
+            commands[key]['class'] = commands[key]['class'](client)
 
 
 # Help is built in, not a plugin
@@ -56,7 +52,7 @@ class Help:
             if com['visible']:
                 response.append(".{0} (!{0})".format(command))
                 response.append("  {0}".format(com['description']))
-                response.append("  Example: `{0}`".format(com['example']))
+                response.append("  Example: {0}".format(com['example']))
 
         # Close the code block
         response.append('```')

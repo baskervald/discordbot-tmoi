@@ -1,14 +1,6 @@
 import discord
 
-class Plugin:
-
-    data = {
-        'name': 'say',
-        'visible': False,
-        'description': "Say something in a channel",
-        'example': '.say <channelname> <text>'
-    }
-
+class Say:
     def __init__(self, client):
         self.client = client
 
@@ -26,3 +18,11 @@ class Plugin:
             # Send message
             await self.client.send_message(channel, messageString)
 
+commands = {
+    'say': {
+        'visible': False,
+        'description': "Say something in a channel",
+        'example': '.say <channelname> <text>',
+        'class': Say
+    }
+}
