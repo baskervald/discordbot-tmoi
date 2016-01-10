@@ -5,11 +5,10 @@ from os import environ
 from glob import glob
 from os.path import dirname, basename, isfile, join
 
-# from pprint import pprint
-
-# Login
+# Create client
 
 client = discord.Client()
+
 
 # Load all commands from "com" directory
 
@@ -35,25 +34,37 @@ for f in glob('com/*.py'):
             'class': class_
         }
 
+
+# Help is built in, not a plugin
 class Help:
+
+    # Not much to do here. We don't need the client
     def __init__(self, client):
         return
 
     async def run(self, params, message):
+
+        # First two lines of response are always the same
         response = [
             "Hi! I'm baskerbot. My commands are:",
             '```'
         ]
+
+        # Print out all of the commands, their descriptions, and example (but only if visible)
         for command in commands:
             com = commands[command]
             if com['visible']:
                 response.append(".{0} (!{0})".format(command))
                 response.append("  {0}".format(com['description']))
                 response.append("  Example: `{0}`".format(com['example']))
+
+        # Close the code block
         response.append('```')
 
+        # Wrap it up nice and clean and shoot off the message!
         return '\n'.join(response)
 
+# Add help manually since it isn't loaded normally
 commands['help'] = {
     'visible': True,
     'description': "Displays this help dialogue",
@@ -61,8 +72,8 @@ commands['help'] = {
     'class': Help(client)
 }
 
-# On join
 
+# On join print out some useful info
 @client.event
 async def on_ready():
     print('Logged in as')
@@ -78,9 +89,16 @@ async def on_ready():
         for channel in server.channels:
             if channel.type == discord.ChannelType.text:
                 print('  #{0.name}'.format(channel))
-    # print('------')
-    # pprint(commands)
+    print('------')
 
+    # Print out all loaded commands
+    print('Loaded commands')
+    print('------')
+    for command in commands:
+        print('.'+command)
+
+
+# Basic command handler
 @client.event
 async def on_message(message):
 
