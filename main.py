@@ -115,4 +115,10 @@ async def on_message(message):
         if ret != None:
             await client.send_message(message.channel, ret)
 
+
+# On join
+@client.event
+async def on_member_join(member):
+    await client.send_message(member, "Hey! Welcome to the official /r/themoddingofisaac Discord server. I'm baskerbot, your personal assistant. To see what I do, say `.help`. You can use the commands in any of the server channels too, but I'd personally prefer if just this one time you sent it in this chat.")
+
 client.run(environ['DISCORD_EMAIL'], environ['DISCORD_PASSWORD'])
