@@ -72,6 +72,7 @@ commands['help'] = {
 # On join print out some useful info
 @client.event
 async def on_ready():
+    print('------------')
     print('Logged in as')
     print(client.user.name)
     print(client.user.id)

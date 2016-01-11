@@ -13,7 +13,7 @@ class Say:
 
         # Make sure user is a moderator
         member = discord.utils.get(self.client.get_all_members(), id=message.author.id)
-        if member != None and discord.utils.get(member.roles, name='moderators') != None:
+        if channel != None and member != None and discord.utils.get(member.roles, name='moderators') != None:
 
             # Send message
             await self.client.send_message(channel, messageString)
