@@ -1,14 +1,18 @@
 import discord
 from importlib import import_module
 from os import environ
+import asyncio
 
 from glob import glob
 from os.path import dirname, basename, isfile, join
+
+from idle.main import IdleRPG
 
 # Create client
 
 client = discord.Client()
 
+idle = IdleRPG(client)
 
 # Load all commands from "com" directory
 
@@ -99,6 +103,11 @@ async def on_ready():
 @client.event
 async def on_message(message):
 
+    # Idle RPG
+    if message.channel.id == '136654681328975872': # #idle
+        await idle.commandHandler(message)
+        return
+
     # Image and file catch
     if len(message.content) == 0:
         return
@@ -118,4 +127,15 @@ async def on_message(message):
 async def on_member_join(member):
     await client.send_message(member, "Hey! Welcome to the official /r/themoddingofisaac Discord server. I'm baskerbot, your personal assistant. To see what I do, say `.help`. You can use the commands in any of the server channels too, but I'd personally prefer if just this one time you sent it in this chat.")
 
-client.run(environ['DISCORD_EMAIL'], environ['DISCORD_PASSWORD'])
+
+# client.run(environ['DISCORD_EMAIL'], environ['DISCORD_PASSWORD'])
+loop = asyncio.get_event_loop()
+
+try:
+    loop.create_task(idle.run())
+    loop.run_until_complete(client.login(environ['DISCORD_EMAIL'], environ['DISCORD_PASSWORD']))
+    loop.run_until_complete(client.connect())
+except Exception:
+    loop.run_until_complete(client.close())
+finally:
+    loop.close()
