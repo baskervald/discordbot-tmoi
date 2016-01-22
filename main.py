@@ -37,7 +37,6 @@ for f in glob('com/*.py'):
 
 # Help is built in, not a plugin
 class Help:
-
     # Not much to do here. We don't need the client
     def __init__(self, client):
         return
