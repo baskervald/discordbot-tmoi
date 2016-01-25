@@ -11,7 +11,7 @@ commands = {
         'coin':{
             'visible': True,
             'description': "Flips a coin",
-            'usage': ".coin",
+            'example': ".coin",
             'class': Coin
             }
         }
