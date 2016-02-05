@@ -1,16 +1,20 @@
 from bs4 import BeautifulSoup
-from requests import get
+from aiohttp import get
 
 class MoI:
     def __init__(self, client):
         self.client = client
-        self.baseurl = 'http://moddingofisaac.com/mod_search.php?search={0}'
+        self.baseurl = 'http://moddingofisaac.com/mod_search.php'
 
     async def run(self, params, message):
 
         # Make request and load it into beautifulsoup
         query = ' '.join(params)
-        bs = BeautifulSoup(get(self.baseurl.format(query)).text, 'lxml')
+        async with get(self.baseurl, params=[('search', query)]) as r:
+            if not r.status == 200:
+                raise Exception("Response Status = {0}, not 200".format(r.status))
+            resp = await r.text()
+            bs = BeautifulSoup(resp, 'lxml')
 
         # Find all mods listed on page and cut them down to the first three
         mods = bs.find_all('div', class_='item-container')[:3]
