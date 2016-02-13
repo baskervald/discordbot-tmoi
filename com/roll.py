@@ -53,7 +53,7 @@ class Roll:
         else:
             mult, rand = die.split('d')
 
-            if rand > 0:
+            if int(rand) > 0:
                 eq = []
                 value = 0
                 for _ in repeat(None, int(mult)):
