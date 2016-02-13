@@ -63,7 +63,7 @@ class Roll:
 
                 equation = '({0})[{1}]'.format(' + '.join(eq), die)
             else:
-                equation = '0'
+                equation = '()[{0}]'.format(die)
                 value = 0
 
 
