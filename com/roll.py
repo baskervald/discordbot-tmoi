@@ -53,14 +53,19 @@ class Roll:
         else:
             mult, rand = die.split('d')
 
-            eq = []
-            value = 0
-            for _ in repeat(None, int(mult)):
-                val = randrange(int(rand))+1
-                value += val
-                eq.append(str(val))
+            if rand > 0:
+                eq = []
+                value = 0
+                for _ in repeat(None, int(mult)):
+                    val = randrange(int(rand))+1
+                    value += val
+                    eq.append(str(val))
 
-            equation = '({0})[{1}]'.format(' + '.join(eq), die)
+                equation = '({0})[{1}]'.format(' + '.join(eq), die)
+            else:
+                equation = '0'
+                value = 0
+
 
         return (value, equation)
 
