@@ -9,7 +9,7 @@ class Avatar:
         if len(message.mentions) != 0:
             send = '\n'.join([ x.avatar_url for x in message.mentions ])
         else:
-            send = discord.utils.get(self.client.get_all_members(), name=' '.join(params)).avatar_url
+            send = discord.utils.get(message.server.members, name=' '.join(params)).avatar_url
 
         await self.client.send_message(message.channel, send)
 
