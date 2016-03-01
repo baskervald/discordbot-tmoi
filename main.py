@@ -105,8 +105,11 @@ async def on_message(message):
     if message.author == client.user:
         return False
 
+    if message.content == '(╯°□°）╯︵ ┻━┻':
+        await client.send_message(message.channel, 'No. ┬─┬﻿ ノ( ゜-゜ノ)')
+
     # Idle RPG
-    if message.channel.id == '136654681328975872': # #idle
+    if message.channel.id == '136654681328975872':  # #idle
         await idle.commandHandler(message)
         return
 
