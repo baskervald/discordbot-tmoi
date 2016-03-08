@@ -96,7 +96,7 @@ class Play:
         })
 
         self.music.add(res['items'][0]['id']['videoId'])
-        self.music.play()
+        await self.music.play()
         await client.send_message(message.channel, "Added")
 
 class Skip:
