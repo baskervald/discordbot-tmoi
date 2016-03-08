@@ -3,6 +3,7 @@ from importlib import import_module
 from os import environ
 import asyncio
 from pprint import pprint
+from sys import platform as _platform
 
 from glob import glob
 from os.path import dirname, basename, isfile, join
@@ -126,6 +127,8 @@ async def on_ready():
                 print('  #{0.name}'.format(channel))
     print('------')
 
+    if _platform == 'darwin':
+        discord.opus.load_opus('libopus.0.dylib')
     musicChannel = discord.utils.get(client.get_all_channels(), name="Radio")
     voice = await client.join_voice_channel(musicChannel)
     music = MusicClient(client, voice)
