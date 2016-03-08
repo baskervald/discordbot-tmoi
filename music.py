@@ -1,4 +1,4 @@
-import discord
+import asyncio
 
 class MusicClient:
     def __init__(self, client, voice):
@@ -7,6 +7,7 @@ class MusicClient:
         self.voice = voice
         self.playing = False
         self.player = None
+        self.loop = asyncio.get_event_loop()
 
     def add(self, vId):
         self.queue.append(vId)
@@ -23,7 +24,7 @@ class MusicClient:
     def skip(self):
         self.player.stop()
 
-    async def try_play(self):
+    def try_play(self):
         self.playing = False
         if not len(self.queue) == 0:
-            await self.play()
+            asyncio.run_coroutine_threadsafe(self.play())
