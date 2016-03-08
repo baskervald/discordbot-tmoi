@@ -18,6 +18,7 @@ from pafy import call_gdata
 client = discord.Client()
 
 idle = IdleRPG(client)
+music = None
 
 # Load all commands from "com" directory
 
@@ -180,14 +181,10 @@ async def on_message(message):
         ret = await commands[command]['class'].run(params, message)
         if ret != None:
             await client.send_message(message.channel, ret)
-
-
-
 # On join
 # @client.event
 # async def on_member_join(member):
 #     await client.send_message(member, "Hey! Welcome to the official /r/themoddingofisaac Discord server. I'm baskerbot, your personal assistant. To see what I do, say `.help`. You can use the commands in any of the server channels too, but I'd personally prefer if just this one time you sent it in this chat.")
-
 
 # client.run(environ['DISCORD_EMAIL'], environ['DISCORD_PASSWORD'])
 loop = asyncio.get_event_loop()
