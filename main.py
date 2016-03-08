@@ -2,11 +2,15 @@ import discord
 from importlib import import_module
 from os import environ
 import asyncio
+from pprint import pprint
 
 from glob import glob
 from os.path import dirname, basename, isfile, join
 
 from idle.main import IdleRPG
+from music import MusicClient
+
+from pafy import call_gdata
 
 # Create client
 
@@ -71,6 +75,37 @@ commands['help'] = {
     'class': Help(client)
 }
 
+class Play:
+    def __init__(self, client, voice, music):
+        self.client = client
+        self.voice = voice
+        self.apikey = environ['YT_API_KEY']
+        self.music = music
+
+    async def run(self, params, message):
+        res = call_gdata('search', {
+            'q': ' '.join(params),
+            'part': "id",
+            'maxResults': 1,
+            'safeSearch': "none",
+            'order': "relevance",
+            'type': 'video',
+            'videoCategoryId': 10,
+            'key': self.apikey
+        })
+
+        self.music.add(res['items'][0]['id']['videoId'])
+        self.music.play()
+        await client.send_message(message.channel, "Added")
+
+class Skip:
+    def __init__(self, client, music):
+        self.client = client
+        self.music = music
+
+    async def run(self, params, message):
+        self.music.skip()
+        await self.client.send_message(message.channel, "Skipped")
 
 # On join print out some useful info
 @client.event
@@ -91,12 +126,29 @@ async def on_ready():
                 print('  #{0.name}'.format(channel))
     print('------')
 
+    musicChannel = discord.utils.get(client.get_all_channels(), name="Radio")
+    voice = await client.join_voice_channel(musicChannel)
+    music = MusicClient(client, voice)
+
+    commands['play'] = {
+        'visible': True,
+        'description': "Adds to Radio queue",
+        'example': ".play West End Kids New Politics",
+        'class': Play(client,voice,music)
+    }
+
+    commands['skip'] = {
+        'visible': False,
+        'description': "Skips current radio song",
+        'example': ".skip",
+        'class': Skip(client, music)
+    }
+
     # Print out all loaded commands
     print('Loaded commands')
     print('------')
     for command in commands:
         print('.'+command)
-
 
 # Basic command handler
 @client.event
@@ -125,6 +177,7 @@ async def on_message(message):
         ret = await commands[command]['class'].run(params, message)
         if ret != None:
             await client.send_message(message.channel, ret)
+
 
 
 # On join
