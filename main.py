@@ -128,7 +128,7 @@ async def on_ready():
     print('------')
 
     if _platform == 'darwin':
-        discord.opus.load_opus('libopus.0.dylib')
+        discord.opus.load_opus('/opt/local/lib/libopus.0.dylib')
     musicChannel = discord.utils.get(client.get_all_channels(), name="Radio")
     voice = await client.join_voice_channel(musicChannel)
     music = MusicClient(client, voice)
