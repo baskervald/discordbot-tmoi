@@ -5,7 +5,7 @@ class MusicClient:
         self.client = client
         self.queue = []
         self.voice = voice
-        self.player = None
+        self.player = {url:""}
         self.playing = False
         self.firstPlay = True
         self.loop = asyncio.get_event_loop()
