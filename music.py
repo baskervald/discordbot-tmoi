@@ -10,8 +10,11 @@ class MusicClient:
         self.firstPlay = True
         self.loop = asyncio.get_event_loop()
 
-    def add(self, vId):
-        self.queue.append(vId)
+    def add(self, vId, channel):
+        if not vId in self.queue:
+            self.queue.append(vId)
+        else:
+            self.client.send_message(channel, "That's already in the queue.")
 
     async def play(self):
         if self.playing:

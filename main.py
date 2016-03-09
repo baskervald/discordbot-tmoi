@@ -4,6 +4,7 @@ from os import environ
 import asyncio
 from pprint import pprint
 from sys import platform as _platform
+from math import ceil
 
 from glob import glob
 from os.path import dirname, basename, isfile, join
@@ -96,18 +97,33 @@ class Play:
             'key': self.apikey
         })
 
-        self.music.add(res['items'][0]['id']['videoId'])
+        self.music.add(res['items'][0]['id']['videoId'], message.channel)
         await self.music.play()
-        await client.send_message(message.channel, "Added")
 
-class Skip:
-    def __init__(self, client, music):
+class VoteSkip:
+    def __init__(self, client, music, musicChannel):
         self.client = client
         self.music = music
+        self.count = 0
+        self.necessary = None
+        self.voted = []
 
     async def run(self, params, message):
-        self.music.skip()
-        await self.client.send_message(message.channel, "Skipped")
+        if self.necessary == None:
+            self.necessary = ceil(len(musicChannel.voice_members)/2)
+        if self.count < self.necessary:
+            if message.author.id in self.voted:
+                await client.send_message(message.channel, "You can't vote twice, you twit.")
+            else:
+                self.count++
+                self.voted.append(message.author.id)
+                await client.send_message(message.channel, "Vote {0}/{1}".format(self.count, self.necessary))
+        else:
+            self.music.skip()
+            await self.client.send_message(message.channel, "Skipped")
+            self.necessary = None
+            self.voted = []
+            self.count = 0
 
 # On join print out some useful info
 @client.event
@@ -141,11 +157,11 @@ async def on_ready():
         'class': Play(client,voice,music)
     }
 
-    commands['skip'] = {
-        'visible': False,
-        'description': "Skips current radio song",
-        'example': ".skip",
-        'class': Skip(client, music)
+    commands['voteskip'] = {
+        'visible': True,
+        'description': "Vote to skip current radio song",
+        'example': ".voteskip",
+        'class': VoteSkip(client, music, musicChannel)
     }
 
     # Print out all loaded commands
