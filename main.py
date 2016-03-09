@@ -97,7 +97,7 @@ class Play:
             'key': self.apikey
         })
 
-        self.music.add(res['items'][0]['id']['videoId'], message.channel)
+        await self.music.add(res['items'][0]['id']['videoId'], message.channel)
         await self.music.play()
 
 class VoteSkip:
