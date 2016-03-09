@@ -112,7 +112,7 @@ class VoteSkip:
     async def run(self, params, message):
         if self.necessary is None:
             self.necessary = ceil(len(self.channel.voice_members)/2)
-        if self.count < self.necessary:
+        if self.count < self.necessary-1:
             if message.author.id in self.voted:
                 await client.send_message(message.channel, "You can't vote twice, you twit.")
             else:
