@@ -5,13 +5,17 @@ class MusicClient:
         self.client = client
         self.queue = []
         self.voice = voice
-        self.player = {url:""}
+        self.player = None
         self.playing = False
         self.firstPlay = True
         self.loop = asyncio.get_event_loop()
 
     def add(self, vId, channel):
-        if vId not in self.queue and vId not in self.player.url:
+        if vId not in self.queue:
+            if self.playing:
+                if vId in self.player.url:
+                    self.client.send_message(channel, "That's playing right now...")
+                    return False
             self.queue.append(vId)
         else:
             self.client.send_message(channel, "That's already in the queue.")
