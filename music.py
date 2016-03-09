@@ -11,7 +11,7 @@ class MusicClient:
         self.loop = asyncio.get_event_loop()
 
     def add(self, vId, channel):
-        if not vId in self.queue:
+        if vId not in self.queue and vId not in self.player.url:
             self.queue.append(vId)
         else:
             self.client.send_message(channel, "That's already in the queue.")

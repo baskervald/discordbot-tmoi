@@ -115,6 +115,8 @@ class VoteSkip:
         if self.count < self.necessary-1:
             if message.author.id in self.voted:
                 await client.send_message(message.channel, "You can't vote twice, you twit.")
+            elif not message.author in self.channel.voice_members:
+                await client.send_message(message.channel, "You're not even listening...")
             else:
                 self.count += 1
                 self.voted.append(message.author.id)
