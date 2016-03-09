@@ -9,6 +9,8 @@ class MusicClient:
         self.playing = False
         self.firstPlay = True
         self.loop = asyncio.get_event_loop()
+        self.skipCount = 0
+        self.skipList = []
 
     async def add(self, vId, channel):
         if vId not in self.queue:
@@ -32,6 +34,8 @@ class MusicClient:
             await asyncio.sleep(5)
         else:
             self.playing = False
+            self.skipCount = 0
+            self.skipList = []
             if len(self.queue) != 0:
                 await self.play()
 

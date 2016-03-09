@@ -104,26 +104,22 @@ class VoteSkip:
     def __init__(self, client, music, musicChannel):
         self.client = client
         self.music = music
-        self.count = 0
-        self.voted = []
         self.channel = musicChannel
 
     async def run(self, params, message):
         necessary = ceil(len(self.channel.voice_members)/2)
-        if self.count < necessary-1:
-            if message.author.id in self.voted:
+        if self.music.skipCount < necessary-1:
+            if message.author.id in self.music.skipList:
                 await client.send_message(message.channel, "You can't vote twice, you twit.")
             elif not message.author in self.channel.voice_members:
                 await client.send_message(message.channel, "You're not even listening...")
             else:
-                self.count += 1
-                self.voted.append(message.author.id)
-                await client.send_message(message.channel, "Vote {0}/{1}".format(self.count, necessary))
+                self.music.skipCount += 1
+                self.music.skipList.append(message.author.id)
+                await client.send_message(message.channel, "Vote {0}/{1}".format(self.music.skipCount, necessary))
         else:
             self.music.skip()
             await self.client.send_message(message.channel, "Skipped")
-            self.voted = []
-            self.count = 0
 
 # On join print out some useful info
 @client.event
