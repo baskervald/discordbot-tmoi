@@ -12,13 +12,13 @@ class MusicClient:
 
     def add(self, vId, channel):
         if vId not in self.queue:
-            if self.playing:
-                if vId in self.player.url:
-                    self.client.send_message(channel, "That's playing right now...")
-                    return False
+            if self.playing and vId in self.player.url:
+                await self.client.send_message(channel, "That's playing right now...")
+                return False
             self.queue.append(vId)
+            await self.client.send_message(channel, "Added")
         else:
-            self.client.send_message(channel, "That's already in the queue.")
+            await self.client.send_message(channel, "That's already in the queue.")
 
     async def play(self):
         if self.playing:
