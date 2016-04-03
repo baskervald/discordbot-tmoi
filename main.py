@@ -2,7 +2,6 @@ import discord
 from importlib import import_module
 from os import environ
 import asyncio
-from pprint import pprint
 from sys import platform as _platform
 from math import ceil
 
@@ -173,7 +172,7 @@ async def on_message(message):
     if message.author == client.user:
         return False
 
-    if message.content == '(╯°□°）╯︵ ┻━┻':
+    if '(╯°□°）╯︵ ┻━┻' in message.content:
         await client.send_message(message.channel, 'No. ┬─┬﻿ ノ( ゜-゜ノ)')
 
     # Idle RPG
